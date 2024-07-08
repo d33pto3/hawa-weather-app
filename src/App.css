@@ -1,0 +1,42 @@
+.low-opacity-bg-image {
+  --bg-image: url("./assets/pexels-liger-pham-232622-1108701.jpg");
+  --bg-image-opacity: 0.7;
+
+  position: relative;
+  isolation: isolate;
+}
+
+.low-opacity-bg-image::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+}
+
+.low-opacity-bg-image::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Adjust this to control the dimming effect */
+  pointer-events: none; /* Ensure the overlay doesn't interfere with text interaction */
+}
+
+/* .low-opacity-bg-image::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: var(--bg-image-opacity);
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+} */
