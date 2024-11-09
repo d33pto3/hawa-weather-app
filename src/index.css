@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Caveat-Bold";
+  src: local("Caveat-Bold"),
+    url("./assets/fonts/Caveat-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Caveat-Medium";
+  src: local("Caveat-Medium"),
+    url("./assets/fonts/Caveat-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Caveat-Regular";
+  src: local("Caveat-Regular"),
+    url("./assets/fonts/Caveat-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Caveat-SemiBold";
+  src: local("Caveat-SemiBold"),
+    url("./assets/fonts/Caveat-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: local("Montserrat-Regular"),
+    url("./assets/fonts/Montserrat-Regular.ttf") format("truetype");
+}

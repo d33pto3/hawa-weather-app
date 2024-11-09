@@ -28,3 +28,30 @@ export const weatherIcons = [
   { code: 96, emoji: "⛈️", text: "Thunderstorm with slight hail" },
   { code: 99, emoji: "⛈️", text: "Thunderstorm with heavy hail" },
 ];
+
+export interface Zilla {
+  name: string;
+  lat: number;
+  lng: number;
+}
+
+export interface ICurrentWeather {
+  current: {
+    apparent_temperature?: number;
+    temperature_2m?: number;
+    weather_code?: number;
+    wind_speed_10m?: number;
+    relative_humidity_2m?: number;
+    cloud_cover?: number;
+  };
+  current_units: {
+    apparent_temperature?: string;
+    temperature_2m?: string;
+    weather_code?: string;
+    wind_speed_10m?: string;
+    relative_humidity_2m?: string;
+    cloud_cover?: string;
+  };
+  latitude: number;
+  longitude: number;
+}

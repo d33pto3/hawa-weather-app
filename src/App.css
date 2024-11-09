@@ -40,3 +40,26 @@
   background-size: cover;
   background-position: center;
 } */
+
+.rightSide::-webkit-scrollbar,
+select::-webkit-scrollbar {
+  width: 8px;
+  background-color: #fff;
+}
+
+.rightSide::-webkit-scrollbar-track,
+select::-webkit-scrollbar-track {
+  background: #7814d5;
+  /* border-radius: 16px; */
+}
+
+.rightSide::-webkit-scrollbar-thumb,
+select::-webkit-scrollbar-thumb {
+  background: #bc14d3;
+  border-radius: 16px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: #c848c2;
+  cursor: grab;
+}
