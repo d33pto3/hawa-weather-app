@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getWeatherIcon } from "../utils";
 import { ICurrentWeather, Zilla } from "../types";
 import MapComponent from "./MapComponent";
@@ -28,6 +29,7 @@ const RightSide: React.FC<RightSideProps> = ({
   lng,
   onAddressChange,
 }) => {
+  const { t } = useTranslation();
   const [dailyWeather, setDailyWeather] = useState<any>({});
   const [hourlyWeather, setHourlyWeather] = useState<any>({});
 
@@ -162,7 +164,7 @@ const RightSide: React.FC<RightSideProps> = ({
             }`}
             onClick={() => onOptionChange("byZilla")}
           >
-            Zilla
+            {t('zilla')}
           </button>
           <button
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
@@ -172,7 +174,7 @@ const RightSide: React.FC<RightSideProps> = ({
             }`}
             onClick={() => onOptionChange("byMap")}
           >
-            Map
+            {t('map')}
           </button>
         </div>
         <div className="mt-4">
@@ -182,7 +184,7 @@ const RightSide: React.FC<RightSideProps> = ({
                 className="w-full text-sm uppercase bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)]"
                 onChange={onZillaSelect}
               >
-                <option>Select Region</option>
+                <option>{t('select_region')}</option>
                 {zillas.map((z: any) => (
                   <option key={z.id}>{z.name}</option>
                 ))}
@@ -203,11 +205,11 @@ const RightSide: React.FC<RightSideProps> = ({
         
         <div className="grid grid-cols-1 gap-2">
           {[
-            { label: "Humidity", value: relativeHumidity, color: "var(--accent-blue)" },
-            { label: "Cloudy", value: cloudy, color: "gray" },
-            { label: "Wind", value: windSpeed, color: "var(--accent-yellow)" },
-            { label: "Max", value: `${dailyWeather?.daily?.temperature_2m_max || "0"}°`, color: "var(--accent-red)" },
-            { label: "Min", value: `${dailyWeather?.daily?.temperature_2m_min || "0"}°`, color: "var(--accent-blue)" }
+            { label: t('humidity'), value: relativeHumidity, color: "var(--accent-blue)" },
+            { label: t('cloudy'), value: cloudy, color: "gray" },
+            { label: t('wind'), value: windSpeed, color: "var(--accent-yellow)" },
+            { label: t('max'), value: `${dailyWeather?.daily?.temperature_2m_max || "0"}°`, color: "var(--accent-red)" },
+            { label: t('min'), value: `${dailyWeather?.daily?.temperature_2m_min || "0"}°`, color: "var(--accent-blue)" }
           ].map((item, i) => (
             <div key={i} className="flex border-b border-[var(--border-color)] py-2 items-center justify-between opacity-90">
                <div className="flex items-center gap-2">
@@ -220,7 +222,7 @@ const RightSide: React.FC<RightSideProps> = ({
         </div>
 
         <div className="mt-8 border-t-4 border-[var(--border-color)] pt-4">
-          <div className="text-xs uppercase mb-4 tracking-widest text-[var(--text-primary)]">Hourly Forecast</div>
+          <div className="text-xs uppercase mb-4 tracking-widest text-[var(--text-primary)]">{t('hourly')}</div>
           <div className="divide-y divide-[var(--border-color)]">
             {hourlyWeather?.time?.map((time: string, index: number) => (
               <div className="flex justify-between py-2 items-end" key={index}>

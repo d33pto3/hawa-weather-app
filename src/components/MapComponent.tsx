@@ -1,4 +1,5 @@
 import { FC, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import { center } from "../utils";
@@ -46,6 +47,7 @@ const LocationMarker = ({
 };
 
 const MapComponent: FC<MapComponentProps> = ({ onLocationSelect }) => {
+  const { t } = useTranslation();
   const [markerPosition, setMarkerPosition] = useState<{
     lat: number;
     lng: number;
@@ -111,7 +113,7 @@ const MapComponent: FC<MapComponentProps> = ({ onLocationSelect }) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => searchQuery.length > 2 && setShowSuggestions(true)}
-          placeholder="SEARCH ANYWHERE..."
+          placeholder={t('search_location')}
           className="flex-grow text-xs uppercase p-2 border-2 border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] font-bold focus:outline-none"
         />
         <button

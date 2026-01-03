@@ -15,7 +15,10 @@ interface locationCoordination {
   lng: string;
 }
 
+import { useTranslation } from "react-i18next";
+
 function App() {
+  const { t, i18n } = useTranslation();
   // const [loading, setLoading] = useState<boolean>(true);
 
   const [selectedZilla, setSelectedZilla] = useState<Zilla | null>();
@@ -62,7 +65,7 @@ function App() {
     if (!lat && !lng) return;
 
     const urlExtension = `${
-      import.meta.env?.VITE_API_SEREVR
+      import.meta.env?.VITE_API_SERVER
     }latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m,apparent_temperature,relative_humidity_2m,weather_code,cloud_cover,wind_speed_10m`;
 
     try {
@@ -131,28 +134,43 @@ function App() {
     setTheme(themes[nextIndex]);
   };
 
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'en' ? 'bn' : 'en';
+    i18n.changeLanguage(nextLang);
+  };
+
   return (
     <div className="swiss-grid h-screen w-screen overflow-hidden" data-theme={theme}>
-      {/* Theme Toggle Button */}
-      <button 
-        onClick={toggleTheme}
-        className="fixed bottom-6 right-6 z-[1000] px-4 py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-xs tracking-widest hover:invert"
-      >
-        Theme: {theme}
-      </button>
+      {/* Theme & Language Toggle Buttons */}
+      <div className="fixed bottom-6 right-6 z-[1000] flex flex-col gap-2">
+        <button 
+          onClick={toggleLanguage}
+          className="px-4 py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-xs tracking-widest hover:invert"
+        >
+          {i18n.language === 'en' ? "বাংলা" : "ENGLISH"}
+        </button>
+        <button 
+          onClick={toggleTheme}
+          className="px-4 py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-xs tracking-widest hover:invert"
+        >
+          {t('theme')}: {theme}
+        </button>
+      </div>
 
       {/* SECTION 1: TITLE (Top Left) */}
       <div className="col-span-8 row-span-2 swiss-cell border-b-4 border-r-4 flex items-start justify-between">
-        <h1 className="massive-text text-8xl">HAWA</h1>
+        <h1 className="massive-text text-8xl">{t('title')}</h1>
         <div className="text-right">
-          <div className="font-bold text-xl uppercase tracking-tighter">Weather Report</div>
-          <div className="text-sm font-medium">International Typographic Style</div>
+          <div className="font-bold text-xl uppercase tracking-tighter">{t('subtitle')}</div>
+          <div className="text-sm font-medium">{t('style_label')}</div>
         </div>
       </div>
 
       {/* SECTION 2: MAP (Top Right) */}
       <div className="col-span-4 row-span-6 swiss-cell border-b-4 flex flex-col">
-        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 absolute top-0 left-0 text-xs font-bold uppercase">Location Selector</div>
+        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 absolute top-0 left-0 text-xs font-bold uppercase">
+          {selectedOption === 'byZilla' ? t('zilla') : t('map')}
+        </div>
         <div className="flex-grow pt-8 overflow-hidden">
           <RightSide
             selectedZilla={selectedZilla}
@@ -171,7 +189,7 @@ function App() {
 
       {/* SECTION 3: TEMPERATURE (Middle Left) */}
       <div className="col-span-8 row-span-6 swiss-cell border-b-4 border-r-4 flex items-center justify-center relative">
-        <div className="absolute top-4 left-4 bg-[var(--accent-red)] text-white px-4 py-1 text-2xl font-black uppercase">Current</div>
+        <div className="absolute top-4 left-4 bg-[var(--accent-red)] text-white px-4 py-1 text-2xl font-black uppercase">{t('current')}</div>
         <div className="flex flex-col items-center">
           <div className="massive-text text-[26rem] leading-none">
             {currentWeather?.current?.temperature_2m ? Math.round(currentWeather.current.temperature_2m) : "00"}
@@ -184,18 +202,18 @@ function App() {
 
       {/* SECTION 4: FEELS LIKE (Bottom Left 1/2) */}
       <div className="col-span-4 row-span-4 swiss-cell border-r-4 flex flex-col justify-between">
-        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 self-start text-xs font-bold uppercase">Apparent</div>
+        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 self-start text-xs font-bold uppercase">{t('apparent')}</div>
         <div className="massive-text text-9xl text-[var(--accent-blue)]">
           {currentWeather?.current?.apparent_temperature ? Math.round(currentWeather.current.apparent_temperature) : "00"}°
         </div>
-        <div className="font-bold uppercase tracking-widest text-sm">Feels like temperature</div>
+        <div className="font-bold uppercase tracking-widest text-sm">{t('feels_like')}</div>
       </div>
 
       {/* SECTION 5: ADDRESS & CLOCK (Bottom Left 2/2) */}
       <div className="col-span-4 row-span-4 swiss-cell border-r-4 flex flex-col justify-between bg-[var(--accent-yellow)]">
-        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 self-start text-xs font-bold uppercase">Info</div>
+        <div className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-2 py-1 self-start text-xs font-bold uppercase">{t('info')}</div>
         <div className="font-black text-3xl uppercase leading-tight text-[var(--text-primary)]">
-          {address || "Waiting for location choice..."}
+          {address || t('loading')}
         </div>
         <div className="font-bold text-5xl text-[var(--text-primary)]">
           <Clock currentWeather={currentWeather} />
@@ -204,7 +222,7 @@ function App() {
 
       {/* SECTION 6: CREDITS (Bottom Right) */}
       <div className="col-span-4 row-span-2 swiss-cell flex items-end justify-between">
-         <div className="font-bold text-xs uppercase">Precision Dashboard v1.0</div>
+         <div className="font-bold text-xs uppercase">{t('precision')} v1.0</div>
          <div className="font-black text-xl">2026.03.01</div>
       </div>
     </div>
