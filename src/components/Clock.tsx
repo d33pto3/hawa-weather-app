@@ -27,9 +27,9 @@ const Clock: FC<ClockProps> = ({ currentWeather }) => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="">
-      <div className="">~{ctime}~</div>
-      <div>{getCurrentTime()}</div>
+    <div className="font-black uppercase tracking-tighter">
+      <div className="text-4xl">{ctime}</div>
+      <div className="text-sm mt-1">{getCurrentTime()}</div>
     </div>
   );
 };

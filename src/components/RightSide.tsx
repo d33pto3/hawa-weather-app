@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import { FaTemperatureHalf } from "react-icons/fa6";
-import { IoIosCloudOutline } from "react-icons/io";
-import { MdOutlineWaterDrop } from "react-icons/md";
-import { RiWindyFill } from "react-icons/ri";
 import { getWeatherIcon } from "../utils";
 import { ICurrentWeather, Zilla } from "../types";
 import MapComponent from "./MapComponent";
@@ -155,105 +151,85 @@ const RightSide: React.FC<RightSideProps> = ({
   }, [lat, lng]);
 
   return (
-    <section className="w-[30%] border-l-[2px] border-black font-primaryRegular backdrop-blur-md pt-8 pl-8 pr-[50px] flex flex-col gap-4 overflow-y-auto rightSide">
-      <div className="">
-        <div className="flex justify-center font-semibold">
+    <section className="h-full flex flex-col font-bold rightSide overflow-y-auto text-[var(--text-primary)]">
+      <div className="border-b-2 border-[var(--border-color)] p-4">
+        <div className="flex bg-[var(--border-color)] p-1">
           <button
-            className={`px-[18px] py-[8px] rounded-l-md ${
+            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
               selectedOption === "byZilla"
-                ? "bg-fuchsia-600 text-slate-50"
-                : "bg-slate-300 hover:bg-slate-400"
-            }  text-black border-black border-[3px]`}
+                ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
+                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:opacity-80"
+            }`}
             onClick={() => onOptionChange("byZilla")}
           >
             Zilla
           </button>
           <button
-            className={`px-[16px] py-[8px]  rounded-r-md ${
+            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
               selectedOption === "byMap"
-                ? "bg-fuchsia-600 text-slate-50"
-                : "bg-slate-300 hover:bg-slate-400"
-            }  text-black border-black border-r-[3px] border-y-[3px]`}
+                ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
+                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:opacity-80"
+            }`}
             onClick={() => onOptionChange("byMap")}
           >
             Map
           </button>
         </div>
-        <div className="my-2">
+        <div className="mt-4">
           {selectedOption === "byZilla" && (
-            <select
-              className=" border-fuchsia-400 py-1 w-full rounded-[8px] bg-transparent border-[1px] focus:outline-none select mt-3 text-slate-950"
-              onChange={onZillaSelect}
-            >
-              <option>Please choose a zilla</option>
-              {zillas.map((z: any) => (
-                <option key={z.id}>{z.name}</option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                className="w-full text-sm uppercase bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                onChange={onZillaSelect}
+              >
+                <option>Select Region</option>
+                {zillas.map((z: any) => (
+                  <option key={z.id}>{z.name}</option>
+                ))}
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-primary)]">▼</div>
+            </div>
           )}
           {selectedOption === "byMap" && (
             <MapComponent onLocationSelect={onLocationSelect} />
           )}
         </div>
       </div>
-      <div className="text-center pb-1 font-semibold border-b-[1px] text-xl">
-        Weather Details
-      </div>
-      <div className="pt-4">
-        <div className="uppercase font-bold text-purple-200">
-          {weatherStatus?.text} {weatherStatus.emoji}
+
+      <div className="p-4 flex-grow">
+        <div className="uppercase text-4xl font-black mb-6 leading-none border-b-4 border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
+          {weatherStatus?.text}
         </div>
-        <div className="grid grid-cols-2 gap-3 pt-4">
-          <div>Temp max</div>
-          <div className="flex items-center gap-1">
-            {dailyWeather?.daily?.temperature_2m_max || "N/A"}
-            {dailyWeather?.daily_units?.temperature_2m_max}
-            <span className="text-red-200">
-              <FaTemperatureHalf />
-            </span>
-          </div>
-          <div>Temp min</div>
-          <div className="flex items-center gap-1">
-            {" "}
-            {dailyWeather?.daily?.temperature_2m_min || "N/A"}
-            {dailyWeather?.daily_units?.temperature_2m_min}
-            <span className="text-blue-200">
-              <FaTemperatureHalf />
-            </span>
-          </div>
-          <div>Humidity</div>
-          <div className="flex items-center gap-1">
-            {relativeHumidity}{" "}
-            <span>
-              <MdOutlineWaterDrop />
-            </span>
-          </div>
-          <div>Cloudy</div>
-          <div className="flex items-center gap-1">
-            {cloudy}{" "}
-            <span>
-              <IoIosCloudOutline />
-            </span>
-          </div>
-          <div>Wind</div>
-          <div className="flex items-center gap-1">
-            {windSpeed}
-            <span>
-              <RiWindyFill />
-            </span>
+        
+        <div className="grid grid-cols-1 gap-2">
+          {[
+            { label: "Humidity", value: relativeHumidity, color: "var(--accent-blue)" },
+            { label: "Cloudy", value: cloudy, color: "gray" },
+            { label: "Wind", value: windSpeed, color: "var(--accent-yellow)" },
+            { label: "Max", value: `${dailyWeather?.daily?.temperature_2m_max || "0"}°`, color: "var(--accent-red)" },
+            { label: "Min", value: `${dailyWeather?.daily?.temperature_2m_min || "0"}°`, color: "var(--accent-blue)" }
+          ].map((item, i) => (
+            <div key={i} className="flex border-b border-[var(--border-color)] py-2 items-center justify-between opacity-90">
+               <div className="flex items-center gap-2">
+                 <div className="w-3 h-3" style={{ backgroundColor: item.color }}></div>
+                 <span className="text-xs uppercase tracking-tighter text-[var(--text-primary)]">{item.label}</span>
+               </div>
+               <span className="text-xl font-black text-[var(--text-primary)]">{item.value}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 border-t-4 border-[var(--border-color)] pt-4">
+          <div className="text-xs uppercase mb-4 tracking-widest text-[var(--text-primary)]">Hourly Forecast</div>
+          <div className="divide-y divide-[var(--border-color)]">
+            {hourlyWeather?.time?.map((time: string, index: number) => (
+              <div className="flex justify-between py-2 items-end" key={index}>
+                <div className="text-sm text-[var(--text-primary)]">{time.slice(11)}</div>
+                <div className="text-2xl font-black text-[var(--text-primary)]">{Math.round(hourlyWeather?.temperature_2m[index])}°</div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-      <div className="pt-3 text-center font-semibold border-b-[1px] pb-1 text-xl">
-        Over the Day
-      </div>
-      <div className="mb-6">
-        {hourlyWeather?.time?.map((time: string, index: number) => (
-          <div className="grid grid-cols-2 gap-3 pt-4" key={index}>
-            <div>{`${time.slice(11)}`}</div>
-            <div>{hourlyWeather?.temperature_2m[index]} °C</div>
-          </div>
-        ))}
       </div>
     </section>
   );

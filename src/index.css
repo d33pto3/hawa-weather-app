@@ -1,33 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&family=Unbounded:wght@400;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Caveat-Bold";
-  src: local("Caveat-Bold"),
-    url("./assets/fonts/Caveat-Bold.ttf") format("truetype");
+:root {
+  /* Default Swiss Theme */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #FFFFFF;
+  --text-primary: #000000;
+  --border-color: #000000;
+  --accent-red: #FF0000;
+  --accent-blue: #0000FF;
+  --accent-yellow: #FFFF00;
+  --grid-border: 2px;
+  --font-main: 'Inter', sans-serif;
 }
 
-@font-face {
-  font-family: "Caveat-Medium";
-  src: local("Caveat-Medium"),
-    url("./assets/fonts/Caveat-Medium.ttf") format("truetype");
+[data-theme='cyber'] {
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0a;
+  --text-primary: #00ffcc;
+  --border-color: #ff00ff;
+  --accent-red: #ff0055;
+  --accent-blue: #00ffcc;
+  --accent-yellow: #f0f;
+  --grid-border: 1px;
+  --font-main: 'Space Mono', monospace;
 }
 
-@font-face {
-  font-family: "Caveat-Regular";
-  src: local("Caveat-Regular"),
-    url("./assets/fonts/Caveat-Regular.ttf") format("truetype");
+[data-theme='glass'] {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: rgba(255, 255, 255, 0.7);
+  --text-primary: #1a1a1b;
+  --border-color: rgba(255, 255, 255, 0.3);
+  --accent-red: #ff4d4d;
+  --accent-blue: #4d94ff;
+  --accent-yellow: #ffd633;
+  --grid-border: 0px;
+  --font-main: 'Inter', sans-serif;
 }
 
-@font-face {
-  font-family: "Caveat-SemiBold";
-  src: local("Caveat-SemiBold"),
-    url("./assets/fonts/Caveat-SemiBold.ttf") format("truetype");
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  transition: all 0.3s ease;
 }
 
-@font-face {
-  font-family: "Montserrat-Regular";
-  src: local("Montserrat-Regular"),
-    url("./assets/fonts/Montserrat-Regular.ttf") format("truetype");
+.swiss-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  height: 100vh;
+  width: 100vw;
+  border: calc(var(--grid-border) * 2) solid var(--border-color);
+  overflow: hidden;
+  background-color: var(--bg-primary);
+}
+
+.swiss-cell {
+  border: var(--grid-border) solid var(--border-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme='glass'] .swiss-cell {
+  backdrop-filter: blur(10px);
+  margin: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+[data-theme='glass'] .swiss-grid {
+  border: none;
+  padding: 12px;
+  gap: 8px;
+  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+}
+
+[data-theme='cyber'] .swiss-grid {
+  gap: 2px;
+  background-color: #ff00ff;
+}
+
+.massive-text {
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.theme-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: black;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid white;
+  text-transform: uppercase;
 }
