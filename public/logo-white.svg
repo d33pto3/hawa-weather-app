@@ -1,0 +1,9 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- <rect width="200" height="200" fill="white"/> -->
+  
+  <path d="M40 100H120C142.091 100 160 82.0914 160 60C160 37.9086 142.091 20 120 20" stroke="white" stroke-width="16" stroke-linecap="square"/>
+  
+  <path d="M40 140H100C122.091 140 140 157.909 140 180" stroke="white" stroke-width="16" stroke-linecap="square"/>
+  
+  <rect x="70" y="20" width="16" height="160" fill="white"/>
+</svg>

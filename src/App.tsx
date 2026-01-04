@@ -145,13 +145,13 @@ function App() {
       <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[1000] flex flex-row md:flex-col gap-2">
         <button 
           onClick={toggleLanguage}
-          className="px-2 md:px-4 py-1 md:py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-[10px] md:text-xs tracking-widest hover:bg-[var(--bg-tertiary)]"
+          className="px-2 md:px-4 py-1 md:py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-[10px] md:text-xs tracking-widest hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)]"
         >
           {i18n.language === 'en' ? "বাংলা" : "ENGLISH"}
         </button>
         <button 
           onClick={toggleTheme}
-          className="px-2 md:px-4 py-1 md:py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-[10px] md:text-xs tracking-widest hover:bg-[var(--bg-tertiary)]"
+          className="px-2 md:px-4 py-1 md:py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] border-2 border-[var(--border-color)] font-bold uppercase text-[10px] md:text-xs tracking-widest hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)]"
         >
           {theme === 'swiss' ? '🎨' : theme === 'cyber' ? '⚡' : '✨'}
           <span className="hidden md:inline ml-1">{t('theme')}: {theme}</span>
@@ -163,9 +163,9 @@ function App() {
         <div className="flex items-center gap-4 md:gap-8">
           <div className="border-4 border-[var(--border-color)] p-0 md:p-1 bg-[var(--bg-primary)] shrink-0">
             <img 
-              src="/logo.svg" 
-              className="w-16 h-16 md:w-20 md:h-20" 
-              alt="Hawa Logo" 
+              src="/logo.svg"
+              className="w-16 h-16 md:w-20 md:h-20 theme-logo"
+              alt="Hawa Logo"
             />
           </div>
           <div>

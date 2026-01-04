@@ -155,22 +155,22 @@ const RightSide: React.FC<RightSideProps> = ({
   return (
     <section className="h-full flex flex-col font-bold rightSide overflow-y-auto text-[var(--text-primary)]">
       <div className="border-b-2 border-[var(--border-color)] p-4">
-        <div className="flex bg-[var(--border-color)] p-1">
+        <div className="flex border-2 border-[var(--border-color)] p-1 gap-1">
           <button
-            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
+            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-all ${
               selectedOption === "byZilla"
-                ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
-                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:bg-[var(--bg-tertiary)]"
+                ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                : "text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byZilla")}
           >
             {t('zilla')}
           </button>
           <button
-            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
+            className={`flex-grow py-2 text-xs uppercase tracking-widest transition-all ${
               selectedOption === "byMap"
-                ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
-                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:bg-[var(--bg-tertiary)]"
+                ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                : "text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byMap")}
           >
