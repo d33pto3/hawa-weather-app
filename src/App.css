@@ -35,9 +35,9 @@ button {
   transition: all 0.2s ease;
 }
 
-button:hover {
-  background-color: black !important;
-  color: white !important;
+/* Global button hover removed to allow component-specific styling */
+button:active {
+  transform: scale(0.98);
 }
 
 .primary-icon {

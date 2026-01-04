@@ -160,7 +160,7 @@ const RightSide: React.FC<RightSideProps> = ({
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
               selectedOption === "byZilla"
                 ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
-                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:opacity-80"
+                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byZilla")}
           >
@@ -170,7 +170,7 @@ const RightSide: React.FC<RightSideProps> = ({
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-colors ${
               selectedOption === "byMap"
                 ? "bg-[var(--bg-primary)] text-[var(--text-primary)]"
-                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:opacity-80"
+                : "bg-[var(--border-color)] text-[var(--bg-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byMap")}
           >

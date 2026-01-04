@@ -100,10 +100,7 @@ const MapComponent: FC<MapComponentProps> = ({ onLocationSelect }) => {
     }
   };
 
-  const mapContainerStyle = {
-    width: "100%",
-    height: "350px",
-  };
+  // Removed mapContainerStyle object to use Tailwind classes
 
   return (
     <div className="flex flex-col gap-2 mt-3 relative">
@@ -118,7 +115,7 @@ const MapComponent: FC<MapComponentProps> = ({ onLocationSelect }) => {
         />
         <button
           type="submit"
-          className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-1 text-xs font-bold uppercase transition-all font-main"
+          className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-4 py-1 text-xs font-bold uppercase transition-all font-main hover:bg-[var(--bg-tertiary)]"
         >
           GO
         </button>
@@ -143,7 +140,7 @@ const MapComponent: FC<MapComponentProps> = ({ onLocationSelect }) => {
         <MapContainer
           center={mapCenter}
           zoom={7}
-          style={mapContainerStyle}
+          className="h-[250px] sm:h-[300px] md:h-[350px] w-full"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

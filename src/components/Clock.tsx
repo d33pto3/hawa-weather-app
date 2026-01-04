@@ -28,8 +28,8 @@ const Clock: FC<ClockProps> = ({ currentWeather }) => {
   }, []);
   return (
     <div className="font-black uppercase tracking-tighter">
-      <div className="text-4xl">{ctime}</div>
-      <div className="text-sm mt-1">{getCurrentTime()}</div>
+      <div>{ctime}</div>
+      <div className="text-xs md:text-sm mt-1">{getCurrentTime()}</div>
     </div>
   );
 };
