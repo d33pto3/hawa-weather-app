@@ -4,6 +4,7 @@ import "./App.css";
 import RightSide from "./components/RightSide";
 import Clock from "./components/Clock";
 import { ICurrentWeather, Zilla } from "./types";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
 
 enum locationOption {
   byZilla = "byZilla",
@@ -126,11 +127,15 @@ function App() {
     }
   };
 
-  const [theme, setTheme] = useState<"swiss" | "cyber" | "glass">("swiss");
+  const [theme, setTheme] = useQueryState(
+    "theme",
+    parseAsStringLiteral(["swiss", "cyber", "glass"]).withDefault("swiss")
+  );
 
   const toggleTheme = () => {
     const themes: ("swiss" | "cyber" | "glass")[] = ["swiss", "cyber", "glass"];
-    const nextIndex = (themes.indexOf(theme) + 1) % themes.length;
+    const currentTheme = theme || "swiss";
+    const nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
     setTheme(themes[nextIndex]);
   };
 
