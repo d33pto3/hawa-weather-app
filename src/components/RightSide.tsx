@@ -159,22 +159,22 @@ const RightSide: React.FC<RightSideProps> = ({
           <button
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-all ${
               selectedOption === "byZilla"
-                ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                ? "bg-[var(--text-primary)] text-[var(--text-inverse)]"
                 : "text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byZilla")}
           >
-            {t('zilla')}
+            {t("zilla")}
           </button>
           <button
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-all ${
               selectedOption === "byMap"
-                ? "bg-[var(--text-primary)] text-[var(--bg-primary)]"
+                ? "bg-[var(--text-primary)] text-[var(--text-inverse)]"
                 : "text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
             }`}
             onClick={() => onOptionChange("byMap")}
           >
-            {t('map')}
+            {t("map")}
           </button>
         </div>
         <div className="mt-4">
@@ -184,12 +184,14 @@ const RightSide: React.FC<RightSideProps> = ({
                 className="w-full text-sm uppercase bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)]"
                 onChange={onZillaSelect}
               >
-                <option>{t('select_region')}</option>
+                <option>{t("select_region")}</option>
                 {zillas.map((z: any) => (
                   <option key={z.id}>{z.name}</option>
                 ))}
               </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-primary)]">▼</div>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-primary)]">
+                ▼
+              </div>
             </div>
           )}
           {selectedOption === "byMap" && (
@@ -202,32 +204,64 @@ const RightSide: React.FC<RightSideProps> = ({
         <div className="uppercase text-4xl font-black mb-6 leading-none border-b-4 border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
           {weatherStatus?.text}
         </div>
-        
+
         <div className="grid grid-cols-1 gap-2">
           {[
-            { label: t('humidity'), value: relativeHumidity, color: "var(--accent-blue)" },
-            { label: t('cloudy'), value: cloudy, color: "gray" },
-            { label: t('wind'), value: windSpeed, color: "var(--accent-yellow)" },
-            { label: t('max'), value: `${dailyWeather?.daily?.temperature_2m_max || "0"}°`, color: "var(--accent-red)" },
-            { label: t('min'), value: `${dailyWeather?.daily?.temperature_2m_min || "0"}°`, color: "var(--accent-blue)" }
+            {
+              label: t("humidity"),
+              value: relativeHumidity,
+              color: "var(--accent-blue)",
+            },
+            { label: t("cloudy"), value: cloudy, color: "gray" },
+            {
+              label: t("wind"),
+              value: windSpeed,
+              color: "var(--accent-yellow)",
+            },
+            {
+              label: t("max"),
+              value: `${dailyWeather?.daily?.temperature_2m_max || "0"}°`,
+              color: "var(--accent-red)",
+            },
+            {
+              label: t("min"),
+              value: `${dailyWeather?.daily?.temperature_2m_min || "0"}°`,
+              color: "var(--accent-blue)",
+            },
           ].map((item, i) => (
-            <div key={i} className="flex border-b border-[var(--border-color)] py-2 items-center justify-between opacity-90">
-               <div className="flex items-center gap-2">
-                 <div className="w-3 h-3" style={{ backgroundColor: item.color }}></div>
-                 <span className="text-xs uppercase tracking-tighter text-[var(--text-primary)]">{item.label}</span>
-               </div>
-               <span className="text-xl font-black text-[var(--text-primary)]">{item.value}</span>
+            <div
+              key={i}
+              className="flex border-b border-[var(--border-color)] py-2 items-center justify-between opacity-90"
+            >
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3"
+                  style={{ backgroundColor: item.color }}
+                ></div>
+                <span className="text-xs uppercase tracking-tighter text-[var(--text-primary)]">
+                  {item.label}
+                </span>
+              </div>
+              <span className="text-xl font-black text-[var(--text-primary)]">
+                {item.value}
+              </span>
             </div>
           ))}
         </div>
 
         <div className="mt-8 border-t-4 border-[var(--border-color)] pt-4">
-          <div className="text-xs uppercase mb-4 tracking-widest text-[var(--text-primary)]">{t('hourly')}</div>
+          <div className="text-xs uppercase mb-4 tracking-widest text-[var(--text-primary)]">
+            {t("hourly")}
+          </div>
           <div className="divide-y divide-[var(--border-color)]">
             {hourlyWeather?.time?.map((time: string, index: number) => (
               <div className="flex justify-between py-2 items-end" key={index}>
-                <div className="text-sm text-[var(--text-primary)]">{time.slice(11)}</div>
-                <div className="text-2xl font-black text-[var(--text-primary)]">{Math.round(hourlyWeather?.temperature_2m[index])}°</div>
+                <div className="text-sm text-[var(--text-primary)]">
+                  {time.slice(11)}
+                </div>
+                <div className="text-2xl font-black text-[var(--text-primary)]">
+                  {Math.round(hourlyWeather?.temperature_2m[index])}°
+                </div>
               </div>
             ))}
           </div>
