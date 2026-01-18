@@ -5,6 +5,7 @@ import RightSide from "./components/RightSide";
 import Clock from "./components/Clock";
 import { ICurrentWeather, Zilla } from "./types";
 import { useQueryState, parseAsStringLiteral } from "nuqs";
+import Skeleton from "./components/Skeleton";
 
 enum locationOption {
   byZilla = "byZilla",
@@ -22,7 +23,7 @@ function App() {
   const { t, i18n } = useTranslation();
   // const [loading, setLoading] = useState<boolean>(true);
 
-  const [selectedZilla, setSelectedZilla] = useState<Zilla | null>();
+  const [selectedZilla, setSelectedZilla] = useState<Zilla | null>(zillas[0]);
   const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>(
     null
   );
@@ -32,6 +33,8 @@ function App() {
     locationOption.byZilla
   );
   const [address, setAddress] = useState("");
+  const [isWeatherLoading, setIsWeatherLoading] = useState(true);
+  const [isAddressLoading, setIsAddressLoading] = useState(true);
 
   const handleAddressChange = (addrs: string) => {
     setAddress(addrs);
@@ -44,6 +47,7 @@ function App() {
   // call API to get weather report based on the selected zilla
   const getCurrentWeatherByZilla = async (zilla: Zilla) => {
     if (!zilla || !zilla.lat || !zilla.lng) return;
+    setIsWeatherLoading(true);
 
     const urlExtension = `${import.meta.env?.VITE_API_SERVER}latitude=${
       zilla?.lat
@@ -53,17 +57,18 @@ function App() {
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
-      console.log(weatherData);
       setCurrentWeather(weatherData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsWeatherLoading(false);
     }
   };
 
   const getCurrentWeather = async (lat: string, lng: string) => {
     if (!lat && !lng) return;
+    setIsWeatherLoading(true);
 
     const urlExtension = `${
       import.meta.env?.VITE_API_SERVER
@@ -71,11 +76,12 @@ function App() {
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
       setCurrentWeather(weatherData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsWeatherLoading(false);
     }
   };
 
@@ -87,7 +93,8 @@ function App() {
   const handleZillaSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     console.log(e);
     setSelectedZilla(
-      zillas.find((item) => item?.name === e.target?.value && item?.name)
+      zillas.find((item) => item?.name === e.target?.value && item?.name) ||
+        null
     );
   };
 
@@ -103,8 +110,10 @@ function App() {
 
   const reverseGeocodeLatLng = async ({ lat, lng }: locationCoordination) => {
     if (!lng || !lat) {
+      setIsAddressLoading(false);
       return 0;
     }
+    setIsAddressLoading(true);
 
     try {
       const response = await fetch(
@@ -121,9 +130,11 @@ function App() {
       }
 
       const data = await response.json();
-      setAddress(data.display_name); // Nominatim property for a full formatted address
+      setAddress(data.display_name);
     } catch (error) {
       console.error("Error fetching location info:", error);
+    } finally {
+      setIsAddressLoading(false);
     }
   };
 
@@ -211,29 +222,34 @@ function App() {
             lng={lng}
             onAddressChange={handleAddressChange}
             onZillaSelect={handleZillaSelect}
+            isWeatherLoading={isWeatherLoading}
           />
         </div>
       </div>
 
       {/* SECTION 3: TEMPERATURE (Middle Left) */}
-      <div
-        style={{
-          borderRight: "2px solid var(--border-color)",
-        }}
-        className="col-span-12 md:col-span-8 row-span-6 swiss-cell border-b-4 md:border-r-4 flex items-center justify-center relative py-12 md:py-0 overflow-hidden"
-      >
+      <div className="col-span-12 md:col-span-8 row-span-6 swiss-cell border-b-4 md:border-r-4 flex items-center justify-center relative py-12 md:py-0 overflow-hidden">
         <div className="absolute top-4 left-4 bg-[var(--accent-red)] text-white px-2 md:px-3 py-1 text-xs md:text-xl font-black uppercase z-10">
           {t("current")}
         </div>
         <div className="flex flex-row items-center justify-center w-full px-4 pl-24 sm:pl-0">
-          <div className="massive-text text-[clamp(6rem,35vw,26rem)] leading-[0.8] select-none">
-            {currentWeather?.current?.temperature_2m
-              ? Math.round(currentWeather.current.temperature_2m)
-              : "00"}
-          </div>
-          <div className="massive-text text-[clamp(2rem,10vw,9rem)] ml-2 md:ml-4 self-center mt-[-2rem] md:mt-[-4rem]">
-            °C
-          </div>
+          {isWeatherLoading ? (
+            <div className="flex items-baseline gap-4">
+              <Skeleton className="w-[clamp(6rem,35vw,26rem)] h-[clamp(6rem,35vw,26rem)]" />
+              <Skeleton className="w-[clamp(2rem,10vw,9rem)] h-[clamp(2rem,10vw,9rem)]" />
+            </div>
+          ) : (
+            <>
+              <div className="massive-text text-[clamp(6rem,35vw,26rem)] leading-[0.8] select-none">
+                {currentWeather?.current?.temperature_2m
+                  ? Math.round(currentWeather.current.temperature_2m)
+                  : "00"}
+              </div>
+              <div className="massive-text text-[clamp(2rem,10vw,9rem)] ml-2 md:ml-4 self-center mt-[-2rem] md:mt-[-4rem]">
+                °C
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -243,10 +259,16 @@ function App() {
           {t("apparent")}
         </div>
         <div className="massive-text text-[clamp(4rem,12vw,8rem)] text-[var(--accent-blue)] leading-none">
-          {currentWeather?.current?.apparent_temperature
-            ? Math.round(currentWeather.current.apparent_temperature)
-            : "00"}
-          °
+          {isWeatherLoading ? (
+            <Skeleton className="w-full h-[clamp(4rem,12vw,8rem)]" />
+          ) : (
+            <>
+              {currentWeather?.current?.apparent_temperature
+                ? Math.round(currentWeather.current.apparent_temperature)
+                : "00"}
+              °
+            </>
+          )}
         </div>
         <div className="font-bold uppercase tracking-widest text-xs md:text-sm">
           {t("feels_like")}
@@ -259,10 +281,21 @@ function App() {
           {t("info")}
         </div>
         <div className="font-black text-xl sm:text-2xl md:text-3xl uppercase leading-tight text-[var(--text-primary)] line-clamp-3">
-          {address || t("loading")}
+          {isAddressLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="w-full h-6" />
+              <Skeleton className="w-[80%] h-6" />
+            </div>
+          ) : (
+            address || t("loading")
+          )}
         </div>
         <div className="font-bold text-3xl sm:text-4xl md:text-5xl text-[var(--text-primary)]">
-          <Clock currentWeather={currentWeather} />
+          {isWeatherLoading ? (
+            <Skeleton className="w-[150px] h-12" />
+          ) : (
+            <Clock currentWeather={currentWeather} />
+          )}
         </div>
       </div>
 

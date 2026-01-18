@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getWeatherIcon } from "../utils";
 import { ICurrentWeather, Zilla } from "../types";
 import MapComponent from "./MapComponent";
+import Skeleton from "./Skeleton";
 
 interface RightSideProps {
   selectedZilla: Zilla | null | undefined;
@@ -15,6 +16,7 @@ interface RightSideProps {
   lng: string;
   onAddressChange: any;
   onZillaSelect: any;
+  isWeatherLoading?: boolean;
 }
 
 const RightSide: React.FC<RightSideProps> = ({
@@ -28,10 +30,12 @@ const RightSide: React.FC<RightSideProps> = ({
   lat,
   lng,
   onAddressChange,
+  isWeatherLoading,
 }) => {
   const { t } = useTranslation();
   const [dailyWeather, setDailyWeather] = useState<any>({});
   const [hourlyWeather, setHourlyWeather] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   // TODO: these will go in utils
   const relativeHumidity = `${
@@ -49,7 +53,7 @@ const RightSide: React.FC<RightSideProps> = ({
 
   const getDailyWeatherByZilla = async (zilla: Zilla) => {
     if (!zilla || !zilla.lat || !zilla.lng) return;
-    // setHourlyLoading(true);
+    setIsLoading(true);
     onAddressChange(`${zilla?.name}, Bangladesh`);
     const urlExtension = `${import.meta.env?.VITE_API_SERVER}latitude=${
       zilla?.lat
@@ -59,34 +63,36 @@ const RightSide: React.FC<RightSideProps> = ({
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
       setDailyWeather(weatherData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getDailyWeather = async () => {
     if (!lat || !lng) return;
-    // setHourlyLoading(true);
+    setIsLoading(true);
     const urlExtension = `${
       import.meta.env?.VITE_API_SERVER
     }latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min,&forecast_days=1`;
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
       setDailyWeather(weatherData);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getHourlyWeatherByZilla = async (zilla: Zilla) => {
     if (!zilla || !zilla.lat || !zilla.lng) return;
-    // setHourlyLoading(true);
+    setIsLoading(true);
     const urlExtension = `${import.meta.env?.VITE_API_SERVER}latitude=${
       zilla?.lat
     }&longitude=${
@@ -95,7 +101,6 @@ const RightSide: React.FC<RightSideProps> = ({
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
       const temperature_2m = weatherData?.hourly?.temperature_2m.slice(
         nowHour,
@@ -109,19 +114,20 @@ const RightSide: React.FC<RightSideProps> = ({
       setHourlyWeather({ temperature_2m, time, weather_code });
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getHourlyWeather = async () => {
     if (!lat || !lng) return;
-    // setHourlyLoading(true);
+    setIsLoading(true);
     const urlExtension = `${
       import.meta.env?.VITE_API_SERVER
     }latitude=${lat}&longitude=${lng}&hourly=temperature_2m,weather_code&forecast_days=2`;
 
     try {
       const res = await fetch(urlExtension);
-      // Parse response body to JSON
       const weatherData = await res.json();
       const temperature_2m = weatherData?.hourly?.temperature_2m.slice(
         nowHour,
@@ -135,6 +141,8 @@ const RightSide: React.FC<RightSideProps> = ({
       setHourlyWeather({ temperature_2m, time, weather_code });
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,10 +191,15 @@ const RightSide: React.FC<RightSideProps> = ({
               <select
                 className="w-full text-sm uppercase bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)]"
                 onChange={onZillaSelect}
+                value={selectedZilla?.name || ""}
               >
-                <option>{t("select_region")}</option>
+                <option value="" disabled>
+                  {t("select_region")}
+                </option>
                 {zillas.map((z: any) => (
-                  <option key={z.id}>{z.name}</option>
+                  <option key={z.id} value={z.name}>
+                    {z.name}
+                  </option>
                 ))}
               </select>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-primary)]">
@@ -202,7 +215,11 @@ const RightSide: React.FC<RightSideProps> = ({
 
       <div className="p-4 flex-grow">
         <div className="uppercase text-4xl font-black mb-6 leading-none border-b-4 border-[var(--border-color)] pb-2 text-[var(--text-primary)]">
-          {weatherStatus?.text}
+          {isWeatherLoading ? (
+            <Skeleton className="w-3/4 h-10 mb-2" />
+          ) : (
+            weatherStatus?.text
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-2">
@@ -243,7 +260,11 @@ const RightSide: React.FC<RightSideProps> = ({
                 </span>
               </div>
               <span className="text-xl font-black text-[var(--text-primary)]">
-                {item.value}
+                {isWeatherLoading || isLoading ? (
+                  <Skeleton className="w-16 h-6" />
+                ) : (
+                  item.value
+                )}
               </span>
             </div>
           ))}
@@ -254,16 +275,26 @@ const RightSide: React.FC<RightSideProps> = ({
             {t("hourly")}
           </div>
           <div className="divide-y divide-[var(--border-color)]">
-            {hourlyWeather?.time?.map((time: string, index: number) => (
-              <div className="flex justify-between py-2 items-end" key={index}>
-                <div className="text-sm text-[var(--text-primary)]">
-                  {time.slice(11)}
-                </div>
-                <div className="text-2xl font-black text-[var(--text-primary)]">
-                  {Math.round(hourlyWeather?.temperature_2m[index])}°
-                </div>
-              </div>
-            ))}
+            {isWeatherLoading || isLoading
+              ? Array.from({ length: 5 }).map((_, i) => (
+                  <div className="flex justify-between py-2 items-end" key={i}>
+                    <Skeleton className="w-12 h-4" />
+                    <Skeleton className="w-10 h-6" />
+                  </div>
+                ))
+              : hourlyWeather?.time?.map((time: string, index: number) => (
+                  <div
+                    className="flex justify-between py-2 items-end"
+                    key={index}
+                  >
+                    <div className="text-sm text-[var(--text-primary)]">
+                      {time.slice(11)}
+                    </div>
+                    <div className="text-2xl font-black text-[var(--text-primary)]">
+                      {Math.round(hourlyWeather?.temperature_2m[index])}°
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       </div>
