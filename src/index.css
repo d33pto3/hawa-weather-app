@@ -327,6 +327,32 @@ body {
   color: white;
 }
 
+/* Glass theme option toggle */
+[data-theme="glass"] .option-toggle {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 4px;
+}
+
+[data-theme="glass"] .option-toggle button {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+}
+
+[data-theme="glass"] .option-toggle button.bg-\[var\(--text-primary\)\] {
+  background: linear-gradient(
+    135deg,
+    rgba(125, 211, 252, 0.4) 0%,
+    rgba(125, 211, 252, 0.1) 100%
+  ) !important;
+  border: 1px solid rgba(125, 211, 252, 0.5) !important;
+  box-shadow: 0 0 15px rgba(125, 211, 252, 0.2) !important;
+  color: white !important;
+}
+
 /* Glass theme input styles */
 [data-theme="glass"] input {
   background: rgba(255, 255, 255, 0.1) !important;

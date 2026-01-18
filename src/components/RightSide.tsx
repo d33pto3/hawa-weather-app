@@ -163,7 +163,7 @@ const RightSide: React.FC<RightSideProps> = ({
   return (
     <section className="h-full flex flex-col font-bold rightSide overflow-y-auto text-[var(--text-primary)]">
       <div className="border-b-2 border-[var(--border-color)] p-4">
-        <div className="flex border-2 border-[var(--border-color)] p-1 gap-1">
+        <div className="flex border-2 border-[var(--border-color)] p-1 gap-1 option-toggle rounded-[var(--btn-radius)]">
           <button
             className={`flex-grow py-2 text-xs uppercase tracking-widest transition-all ${
               selectedOption === "byZilla"
